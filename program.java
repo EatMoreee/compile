@@ -1,125 +1,149 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-//enum Symbol {
-//    BEGINSY, ELSESY, ENDSY, FORSY, IFSY, THENSY,IDSY,INTSY,COLONSY,PLUSSY,STARSY,COMMASY,LPARSY,RPARSY,ASSIGNSY
-//};//当前所识别的单词的类型
-
 public class program {
-    public static String[] inputWords = {"BEGIN", "END", "FOR", "DO", "IF", "THEN", "ELSE"};//Token
-    public static String[] outputWords = {"Begin", "End", "For", "Do", "If", "Then", "Else"};//输出格式
+    public static String[] words = {"BEGIN", "END", "FOR", "DO", "IF", "THEN", "ELSE"};
+    public static String[] wordsOut = {"Begin", "End", "For", "Do", "If", "Then", "Else"};
 
-    public static StringBuffer token = new StringBuffer();//单词的字符串
-    public static int num;//当前存入的整型数值
-    public static int symbol;//当前所识别的单词的类型
-    public static List<Character> record = new ArrayList<Character>();//记录读过的字符
+    public static List<Character> cnow = new ArrayList<Character>();
+    public static char now;
+    public static int symbol;
+    public static int num;
+    public static StringBuffer Token = new StringBuffer();
 
     public static void main(String[] args) throws IOException {
         String name = args[0];
+
+        int c;
+        // BufferedReader text = new BufferedReader(new FileReader("/Users/wzy/Desktop/word/src/code.txt"));
         BufferedReader text = new BufferedReader(new FileReader(name));
-//        InputStreamReader in = new InputStreamReader(System.in); // 读取
-//        BufferedReader text = new BufferedReader(in); // 缓冲
 
         int i = 0;
-        int a;//当前读入的字符，read读入的类型为数字
-        char c;//当前读入的字符
-        while ((a = text.read()) != -1) {
-            c = (char) a;
+        while((c=text.read()) != -1){
+            // System.out.println((char)c);
+//            Token.setLength(0);
+            //now = (char)c;
 
-            if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c)) {
-//                读入的字符不是空格、换行、Tab
-                record.add(c);
+            now=(char)c;
+            if(!isSpace() && !isNewline() && !isTab() && !isEnter()) {
+                cnow.add(now);
+//                System.out.println(now + " 这里加了now，现在长度：" + cnow.size());
             }
 
+            // catToken();
 
-            if (!record.isEmpty()) {
-                c = record.get(0);
-                record.remove(0);//清空
+            if(!cnow.isEmpty()){
+                now=cnow.get(0);
+//                System.out.println(now+"这是从cnow取到的");
+                cnow.remove(0);
+                // System.out.println(now+"现在的now");
             }
 
-            if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c)) {
-                if (isLetter(c)) { //如果是字母
-                    while (isLetter(c) || isDigit(c)) {
-                        catToken(c); //追加
-                        if (!record.isEmpty()) {
-                            c = record.get(0);
-                            record.remove(0);
-                            if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c))
-                                catToken(c);
+            if(!isSpace() && !isNewline() && !isTab() && !isEnter()) {
+                if (isLetter()) { //如果是字母
+
+                    while (isLetter() || isDigit()) {
+                        // System.out.println(Token+" 现在的token");
+                        catToken(); //追加
+                        if(!cnow.isEmpty()){
+                            now=cnow.get(0);
+                            cnow.remove(0);
+                            // System.out.println(now+"现在的now");
+                            if(!isSpace() && !isNewline() && !isTab() && !isEnter())
+                                catToken();
                         }
-                        a = text.read();
-                        c = (char) a;
+                        c = text.read();//读下一个直到不再是字符串
+
+                        now = (char) c;
                     }
-                    if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c)) {
-                        record.add(c); //最后一个多读的放进list
+                    // System.out.println(Token+"这是token");
+                    if(!isSpace() && !isNewline() && !isTab() && !isEnter()){
+                        cnow.add(now); //最后一个多读的放进list
+//                         System.out.println(now+" 这里加了now, 现在长度：" + cnow.size());
                     }
 
                     symbol = reserver();
 
-                    if (symbol != 7) {
-                        System.out.println(outputWords[symbol]);
-                    } else if (symbol == 7) {
-                        System.out.println("Ident(" + (token.toString()) + ")");
+                    if(symbol != 7){
+                        System.out.println(wordsOut[symbol]);
+                    }
+                    else if(symbol == 7){
+                        System.out.println("Ident("+(Token.toString()) +")");
                     }
 
-                    token.setLength(0);
-                } else if (isDigit(c)) {
-                    while (isDigit(c)) {
-                        catToken(c);
-                        if (!record.isEmpty()) {
-                            c = record.get(0);
-                            record.remove(0);
-                            if (isDigit(c))
-                                catToken(c);
-                        } else {
-                            a = text.read();
+                    //System.out.println(Token.toString() + "," + symbol);
+                    Token.setLength(0);
+                } else if (isDigit()) {
+                    while (isDigit()) {
+                        catToken();
+                        if(!cnow.isEmpty()){
+                            now=cnow.get(0);
+                            cnow.remove(0);
+                            // System.out.println(now+"现在的now");
+                            if(isDigit())
+                                catToken();
+                        }
+                        else {
+                            c = text.read();
 
-                            c = (char) a;
+                            now = (char) c;
                         }
                     }
-                    if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c) && !isDigit(c)) {
-                        record.add(c);
+                    if(!isSpace() && !isNewline() && !isTab() && !isEnter() && !isDigit()){
+                        cnow.add(now);
+//                         System.out.println(now + " 这里加了now, 现在长度：" + cnow.size());
                     }
 
+
                     num = transNum();
-                    symbol = 9;
-                    System.out.println("Int(" + num + ")");
-                    token.setLength(0);
-                } else if (isColon(c)) {
-                    if (!record.isEmpty()) {
-                        c = record.get(0);
-                        record.remove(0);
-                    } else {
-                        a = text.read();
-                        c = (char) a;
+
+                    //symbol = 9;
+                    System.out.println("Int("+num+")");
+                    Token.setLength(0);
+                } else if (isColon()) {
+
+                    if(!cnow.isEmpty()){
+                        now = cnow.get(0);
+                        cnow.remove(0);
                     }
-                    if (isEqu(c)) {
+
+                    else{
+                        c = text.read();
+
+                        now = (char)c;
+                    }
+
+//                     if(cnow.size()>0)
+//                     System.out.println(cnow.get(0));
+//                     System.out.println((int)now+"看看你是不是等号");
+                    if (isEqu()) {
                         symbol = 16;
                         System.out.println("Assign");
                     } else {
-                        if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c)) {
-                            record.add(c);
+                        if(!isSpace() && !isNewline() && !isTab() && !isEnter()){
+                            cnow.add(now);
+//                             System.out.println(now + " 这里加了now, 现在长度：" + cnow.size());
                         }
+
                         symbol = 10;
                         System.out.println("Colon");
                     }
-                } else if (isPlus(c)) {
+                } else if (isPlus()) {
                     symbol = 11;
                     System.out.println("Plus");
-                } else if (isStar(c)) {
+                } else if (isStar()) {
                     symbol = 12;
                     System.out.println("Star");
-                } else if (isComma(c)) {
+                } else if (isComma()) {
                     symbol = 13;
                     System.out.println("Comma");
-                } else if (isLpar(c)) {
+                } else if (isLpar()) {
                     symbol = 14;
                     System.out.println("LParenthesis");
-                } else if (isRpar(c)) {
+                } else if (isRpar()) {
                     symbol = 15;
                     System.out.println("RParenthesis");
                 } else {
@@ -128,90 +152,94 @@ public class program {
                 }
             }
         }
-        text.close();
     }
 
-    private static boolean isPlus(char c) {
-        return c == 43;
+    private static boolean isRpar() {
+        return now == 41;
     }
 
-    private static boolean isStar(char c) {
-        return c == 42;
+    private static boolean isLpar() {
+        return now == 40;
     }
 
-    private static boolean isLpar(char c) {
-        return c == 40;
+    private static boolean isComma() {
+        return now == 44;
     }
 
-    private static boolean isRpar(char c) {
-        return c == 41;
+    private static boolean isStar() {
+        return now == 42;
     }
 
-    private static boolean isComma(char c) {
-        return c == 44;
+    private static boolean isPlus() {
+        return now == 43;
     }
 
-    private static boolean isEqu(char c) {
-        return c == 61;
+    private static boolean isEqu() {
+        return now == 61;
     }
 
-    private static boolean isColon(char c) {
-        return c == 58;
+    private static boolean isColon() {
+        return now == 58;
     }
 
     private static int transNum() {
-        int len = token.length();
-        int i;
-        for (i = 0; i < len; i++) {
-            if (token.charAt(i) != '0') {
-                token.delete(0, i);//去掉前置0
+        int judge = 0;
+        int len = Token.length();
+
+        for(int i = 0; i < Token.length(); i ++){
+            if(Token.charAt(i) == '0'){
+                judge ++;
+            }
+        }
+
+        if(judge == Token.length()) return 0;
+
+        for(int i = 0; i < Token.length(); i ++){
+            if(Token.charAt(i) != '0'){
+                Token.delete(0,i);
                 break;
             }
         }
-        if (i == len - 1) {
-            return 0;
-        }
-        return Integer.parseInt(token.toString());
+
+        int number = 0;
+
+
+        number = Integer.valueOf(Integer.parseInt(Token.toString()));
+        return number;
     }
 
-    private static int reserver() {//是否保留字
-        for (int i = 0; i < 7; i++) {
-            if (token.toString().equals(inputWords[i])) {
+    private static int reserver() {
+        for(int i = 0; i < 7; i ++){
+            if(Token.toString().equals(words[i])){
                 return i;
             }
         }
         return 7;
     }
 
-    private static void catToken(char c) {
-        token.append(c);
+    private static void catToken() {
+        Token.append(now);
     }
 
-    public static boolean isSpace(char c) {
-        return c == 32;
+    public static boolean isSpace() {
+        return now==32;
     }
-
-    public static boolean isNewline(char c) {
-        return c == 10;
+    public static boolean isNewline(){
+        return now == 10;
     }
-
-    public static boolean isEnter(char c) {
-        return c == 13;
+    public static boolean isEnter(){
+        return now == 13;
     }
-
-    public static boolean isTab(char c) {
-
-        return c == 9;
+    public static boolean isTab(){
+        return now == 9;
     }
-
-    public static boolean isLetter(char c) {
-        if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+    public static boolean isLetter(){
+        if((now >= 65 && now <= 90) || (now >= 97 && now <= 122))
             return true;
         else return false;
     }
-
-    public static boolean isDigit(char c) {
-        if (c >= 48 && c <= 57)
+    public static boolean isDigit(){
+        if(now >= 48 && now <= 57)
             return true;
         else return false;
     }
