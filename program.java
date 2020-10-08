@@ -19,10 +19,10 @@ public class program {
 //    public static List<Character> record = new ArrayList<Character>();//记录读过的字符
 
     public static void main(String[] args) throws IOException {
-//        String name = args[0];
-//        BufferedReader text = new BufferedReader(new FileReader(name));
-        InputStreamReader in = new InputStreamReader(System.in); // 读取
-        BufferedReader text = new BufferedReader(in); // 缓冲
+        String name = args[0];
+        BufferedReader text = new BufferedReader(new FileReader(name));
+//        InputStreamReader in = new InputStreamReader(System.in); // 读取
+//        BufferedReader text = new BufferedReader(in); // 缓冲
 
         int i = 0;
         int a = text.read();//当前读入的字符，read读入的类型为数字
