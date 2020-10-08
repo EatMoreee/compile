@@ -59,6 +59,7 @@ public class program {
                 else if (symbol == 7) {
                     System.out.println("Ident(" + (token.toString()) + ")");
                 }
+                continue;
             }
             else if (isDigit(c)) {
                 while (isDigit(c)) {
@@ -87,6 +88,7 @@ public class program {
                     symbol = 10;
                     System.out.println("Colon");
                 }
+                continue;
             }
             else if (isPlus(c)) {
                 symbol = 11;
