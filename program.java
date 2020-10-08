@@ -16,49 +16,41 @@ public class program {
     public static StringBuffer token = new StringBuffer();//单词的字符串
     public static int num;//当前存入的整型数值
     public static int symbol;//当前所识别的单词的类型
-    public static List<Character> record = new ArrayList<Character>();//记录读过的字符
+//    public static List<Character> record = new ArrayList<Character>();//记录读过的字符
 
     public static void main(String[] args) throws IOException {
-        String name = args[0];
-        BufferedReader text = new BufferedReader(new FileReader(name));
-//        InputStreamReader in = new InputStreamReader(System.in); // 读取
-//        BufferedReader text = new BufferedReader(in); // 缓冲
+//        String name = args[0];
+//        BufferedReader text = new BufferedReader(new FileReader(name));
+        InputStreamReader in = new InputStreamReader(System.in); // 读取
+        BufferedReader text = new BufferedReader(in); // 缓冲
 
         int i = 0;
-        int a;//当前读入的字符，read读入的类型为数字
-        char c;//当前读入的字符
-        while ((a = text.read()) != -1) {
-            c = (char) a;
+        int a = text.read();//当前读入的字符，read读入的类型为数字
+        char c = (char) a;//当前读入的字符
+        char record = c;//记录
 
-            if (isSpace(c) || isNewline(c) || isTab(c) || isEnter(c)) {
+        while (true) {
+            token.setLength(0);
+            while (isSpace(c) || isNewline(c) || isTab(c) || isEnter(c)) {
 //                如果读入的字符是空格、换行、Tab、Enter,继续读入下一个字符
+                a = text.read();
+                if(a == -1) break;
+                c = (char) a;
+                record = c;
                 continue;
-            }
-            else{
-                record.add(c);
-            }
-
-
-            if (!record.isEmpty()) {
-                c = record.get(0);
-                record.remove(0);//清空
             }
 
             if (isLetter(c)) { //如果是字母
                 while (isLetter(c) || isDigit(c)) {
                     catToken(c); //追加
-                    if (!record.isEmpty()) {
-                        c = record.get(0);
-                        record.remove(0);
-                        if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c))
-                            catToken(c);
-                    }
                     a = text.read();
+                    if(a == -1) break;
                     c = (char) a;
+                    record = c;
                 }
-                if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c)) {
-                    record.add(c); //最后一个多读的放进list
-                }
+
+                c = record;//回退
+
                 symbol = reserver();
 
                 if (symbol != 7) {
@@ -67,47 +59,31 @@ public class program {
                 else if (symbol == 7) {
                     System.out.println("Ident(" + (token.toString()) + ")");
                 }
-                token.setLength(0);
-                }
+            }
             else if (isDigit(c)) {
                 while (isDigit(c)) {
                     catToken(c);
-                    if (!record.isEmpty()) {
-                        c = record.get(0);
-                        record.remove(0);
-                        if (isDigit(c))
-                            catToken(c);
-                    }
-                    else {
-                        a = text.read();
-                        c = (char) a;
-                    }
-                }
-                if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c) && !isDigit(c)) {
-                    record.add(c);
+                    a = text.read();
+                    if(a == -1) break;
+                    c = (char) a;
+                    record = c;
                 }
                 num = transNum();
                 symbol = 9;
                 System.out.println("Int(" + num + ")");
-                token.setLength(0);
             }
             else if (isColon(c)) {
-                if (!record.isEmpty()) {
-                    c = record.get(0);
-                    record.remove(0);
-                }
-                else {
-                    a = text.read();
-                    c = (char) a;
-                }
+                a = text.read();
+                if(a == -1) break;
+                c = (char) a;
+                record = c;
+
                 if (isEqu(c)) {
                     symbol = 16;
                     System.out.println("Assign");
                 }
                 else {
-                    if (!isSpace(c) && !isNewline(c) && !isTab(c) && !isEnter(c)) {
-                        record.add(c);
-                    }
+                    c = record;//回退
                     symbol = 10;
                     System.out.println("Colon");
                 }
@@ -136,6 +112,10 @@ public class program {
                 System.out.println("Unknown");
                 break;
             }
+            a = text.read();
+            if(a == -1) break;
+            c = (char) a;
+            record = c;
         }
 
         text.close();
