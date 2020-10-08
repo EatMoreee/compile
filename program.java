@@ -69,9 +69,13 @@ public class program {
                     c = (char) a;
                     record = c;
                 }
+                
+                c = record;//回退
+
                 num = transNum();
                 symbol = 9;
                 System.out.println("Int(" + num + ")");
+                continue;
             }
             else if (isColon(c)) {
                 a = text.read();
@@ -160,7 +164,7 @@ public class program {
                 break;
             }
         }
-        if (i == len - 1) {
+        if (i == len) {
             return 0;
         }
         return Integer.parseInt(token.toString());
