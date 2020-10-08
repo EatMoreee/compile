@@ -19,9 +19,9 @@ public class program {
 //    public static List<Character> record = new ArrayList<Character>();//记录读过的字符
 
     public static void main(String[] args) throws IOException {
-//        String name = args[0];
-//        BufferedReader text = new BufferedReader(new FileReader(name));
-        BufferedReader text = new BufferedReader(new FileReader("./test.txt"));
+        String name = args[0];
+        BufferedReader text = new BufferedReader(new FileReader(name));
+//        BufferedReader text = new BufferedReader(new FileReader("./test.txt"));
 //        InputStreamReader in = new InputStreamReader(System.in); // 读取
 //        BufferedReader text = new BufferedReader(in); // 缓冲
 
