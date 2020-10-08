@@ -1,4 +1,4 @@
-FROM openjdk:12-alpine
+FROM openjdk:11
 # 向容器内复制文件
 COPY ./* /app/
 # 编译程序
