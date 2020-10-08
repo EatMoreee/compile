@@ -19,8 +19,9 @@ public class program {
 //    public static List<Character> record = new ArrayList<Character>();//记录读过的字符
 
     public static void main(String[] args) throws IOException {
-        String name = args[0];
-        BufferedReader text = new BufferedReader(new FileReader(name));
+//        String name = args[0];
+//        BufferedReader text = new BufferedReader(new FileReader(name));
+        BufferedReader text = new BufferedReader(new FileReader("./test.txt"));
 //        InputStreamReader in = new InputStreamReader(System.in); // 读取
 //        BufferedReader text = new BufferedReader(in); // 缓冲
 
@@ -39,6 +40,7 @@ public class program {
                 record = c;
                 continue;
             }
+            if(a == -1 ) break;
 
             if (isLetter(c)) { //如果是字母
                 while (isLetter(c) || isDigit(c)) {
@@ -48,6 +50,7 @@ public class program {
                     c = (char) a;
                     record = c;
                 }
+                if(a == -1 ) break;
 
                 c = record;//回退
 
