@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -18,100 +19,10 @@ public class program {
     public static List<Character> record = new ArrayList<Character>();//记录读过的字符
 
     public static void main(String[] args) throws IOException {
-        getSym();
-    }
-
-    private static boolean isPlus(char c) {
-        return c == 43;
-    }
-
-    private static boolean isStar(char c) {
-        return c == 42;
-    }
-
-    private static boolean isLpar(char c) {
-        return c == 40;
-    }
-
-    private static boolean isRpar(char c) {
-        return c == 41;
-    }
-
-    private static boolean isComma(char c) {
-        return c == 44;
-    }
-
-    private static boolean isEqu(char c) {
-        return c == 61;
-    }
-
-    private static boolean isColon(char c) {
-        return c == 58;
-    }
-
-    private static int transNum() {
-        int len = token.length();
-        int i;
-        for (i = 0; i < len; i++) {
-            if (token.charAt(i) != '0') {
-                token.delete(0, i);//去掉前置0
-                break;
-            }
-        }
-        if (i == len - 1) {
-            return 0;
-        }
-        return Integer.parseInt(token.toString());
-    }
-
-    private static int reserver() {//是否保留字
-        for (int i = 0; i < 7; i++) {
-            if (token.toString().equals(inputWords[i])) {
-                return i;
-            }
-        }
-        return 7;
-    }
-
-    private static void catToken(char c) {
-        token.append(c);
-    }
-
-    public static boolean isSpace(char c) {
-        return c == 32;
-    }
-
-    public static boolean isNewline(char c) {
-        return c == 10;
-    }
-
-    public static boolean isEnter(char c) {
-        return c == 13;
-    }
-
-    public static boolean isTab(char c) {
-
-        return c == 9;
-    }
-
-    public static boolean isLetter(char c) {
-        if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
-            return true;
-        else return false;
-    }
-
-    public static boolean isDigit(char c) {
-        if (c >= 48 && c <= 57)
-            return true;
-        else return false;
-    }
-
-    public static int getSym() throws IOException {
-        //        String name = args[0];
-//        BufferedReader text = new BufferedReader(new FileReader(name));
-        InputStreamReader in = new InputStreamReader(System.in); // 读取
-        // 创建字符流缓冲区
-        BufferedReader text = new BufferedReader(in); // 缓冲
+        String name = args[0];
+        BufferedReader text = new BufferedReader(new FileReader(name));
+//        InputStreamReader in = new InputStreamReader(System.in); // 读取
+//        BufferedReader text = new BufferedReader(in); // 缓冲
 
         int i = 0;
         int a;//当前读入的字符，read读入的类型为数字
@@ -218,7 +129,90 @@ public class program {
             }
         }
         text.close();
-        return 0;
+    }
+
+    private static boolean isPlus(char c) {
+        return c == 43;
+    }
+
+    private static boolean isStar(char c) {
+        return c == 42;
+    }
+
+    private static boolean isLpar(char c) {
+        return c == 40;
+    }
+
+    private static boolean isRpar(char c) {
+        return c == 41;
+    }
+
+    private static boolean isComma(char c) {
+        return c == 44;
+    }
+
+    private static boolean isEqu(char c) {
+        return c == 61;
+    }
+
+    private static boolean isColon(char c) {
+        return c == 58;
+    }
+
+    private static int transNum() {
+        int len = token.length();
+        int i;
+        for (i = 0; i < len; i++) {
+            if (token.charAt(i) != '0') {
+                token.delete(0, i);//去掉前置0
+                break;
+            }
+        }
+        if (i == len - 1) {
+            return 0;
+        }
+        return Integer.parseInt(token.toString());
+    }
+
+    private static int reserver() {//是否保留字
+        for (int i = 0; i < 7; i++) {
+            if (token.toString().equals(inputWords[i])) {
+                return i;
+            }
+        }
+        return 7;
+    }
+
+    private static void catToken(char c) {
+        token.append(c);
+    }
+
+    public static boolean isSpace(char c) {
+        return c == 32;
+    }
+
+    public static boolean isNewline(char c) {
+        return c == 10;
+    }
+
+    public static boolean isEnter(char c) {
+        return c == 13;
+    }
+
+    public static boolean isTab(char c) {
+
+        return c == 9;
+    }
+
+    public static boolean isLetter(char c) {
+        if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+            return true;
+        else return false;
+    }
+
+    public static boolean isDigit(char c) {
+        if (c >= 48 && c <= 57)
+            return true;
+        else return false;
     }
 }
-
