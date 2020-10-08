@@ -30,7 +30,7 @@ public class program {
         while ((a = text.read()) != -1) {
             c = (char) a;
 
-            if (isSpace(c) || isNewline(c) || isTab(c) || !isEnter(c)) {
+            if (isSpace(c) || isNewline(c) || isTab(c) || isEnter(c)) {
 //                如果读入的字符是空格、换行、Tab、Enter,继续读入下一个字符
                 continue;
             }
